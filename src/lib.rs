@@ -1,5 +1,33 @@
 #![no_std]
 
+//! This map doesn't use any allocation or hashing.
+//!
+//! ## Example
+//! ```rust
+//! use std::any::TypeId;
+//! use stacked_type_map::{StackedMap, Map, Removed};
+//!
+//! let map = StackedMap;
+//! assert_eq!(map.len(), 0);
+//! let map = map.insert(1).insert(2).insert(3);
+//! assert_eq!(map.get::<String>(), None);
+//! assert_eq!(map.get::<i32>(), Some(&3));
+//! assert_eq!(map.len(), 1);
+//! let map2 = map.clone();
+//! let map3 = map.clone();
+//! assert!(matches!(map.remove::<String>(), Removed::NotFound(_)));
+//! assert!(matches!(
+//!     map2.remove::<i32>(),
+//!     Removed::Removed { map: _, value: 3 }
+//! ));
+//! let map = map3.insert(());
+//! let map = map.insert("hi");
+//! assert_eq!(
+//!     map.type_id_iter().collect::<Vec<_>>(),
+//!     vec![TypeId::of::<&'static str>(), TypeId::of::<()>()]
+//! );
+//! ```
+
 extern crate alloc;
 
 use core::any::TypeId;
@@ -21,6 +49,11 @@ impl<'a, M: Map> Iterator for MapTypeIdIterator<'a, M> {
         }
         self.depth += 1;
         Some(id)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let remaining = self.map.len() - self.depth;
+        (remaining, Some(remaining))
     }
 }
 
