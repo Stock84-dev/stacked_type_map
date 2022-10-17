@@ -1,0 +1,14 @@
+[package]
+name = "stacked_type_map"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+categories = ["data-structures", "no-std"]
+authors = ["Stock84-dev <leontk8@gmail.com>"]
+keywords = ["type", "hashmap", "map", "stack", "compile"]
+include = ["**/*.rs", "Cargo.toml"]
+repository = "https://github.com/Stock84-dev/stacked_type_map"
+description = "Compile time map of any type."
+
+
+[dependencies]
