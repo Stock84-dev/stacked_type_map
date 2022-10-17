@@ -1,5 +1,7 @@
 #![no_std]
 
+extern crate alloc;
+
 use core::any::TypeId;
 
 struct EmptyTypeId;
@@ -310,6 +312,9 @@ pub enum InsertedMap<M, T> {
 
 #[cfg(test)]
 mod tests {
+    use alloc::string::String;
+    use alloc::vec;
+    use alloc::vec::Vec;
     use super::*;
 
     #[test]
